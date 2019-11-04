@@ -11,7 +11,7 @@ cuda: 10
 # versions of these libraries are selected automatically. Accepts values
 # "tensorflow" and "pytorch", installing Tensorflow v1.12 and Pytorch v1.0
 # respectively.
-framework: tensorflow
+# framework: tensorflow
 # Builds are created for CPU and GPU environments by default. You can use the
 # spec object to limit your builds to one environment if you'd like, for
 # instance if your model doesn't use CUDA or run on a GPU you can set
