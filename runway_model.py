@@ -62,7 +62,7 @@ def setup(opts):
 @runway.command(name='classify',
                 inputs={ 'image': image() },
                 outputs={ 'text': text() },
-                description='Predict cats or dogs in photo')
+                description='Simple keras model example')
 def classify(model, args):
     print('[CLASSIFY] Classifying image')
     predictions = model.classify(args['image'])
