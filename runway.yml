@@ -6,7 +6,7 @@ python: 3.6
 # the generated Docker image.
 entrypoint: python runway_model.py
 # Which NVIDIA CUDA version to use. Supported versions include 10, 9.2, and 9.
-cuda: 10.0
+cuda: 10
 # Which ML framework would you like to pre-install? The appropriate GPU/CPU
 # versions of these libraries are selected automatically. Accepts values
 # "tensorflow" and "pytorch", installing Tensorflow v1.12 and Pytorch v1.0
