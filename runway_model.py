@@ -37,8 +37,8 @@
 # Import the Runway SDK. Please install it first with
 # `pip install runway-python`.
 import runway
-from runway.data_types import number, text, image
-from example_model import ExampleModel
+from runway.data_types import text, image
+from keras_model import KerasModel
 
 # Setup the model, initialize weights, set the configs of the model, etc.
 # Every model will have a different set of configurations and requirements.
@@ -46,39 +46,45 @@ from example_model import ExampleModel
 # supported configs. The setup function should return the model ready to be
 # used.
 setup_options = {
-    'truncation': number(min=1, max=10, step=1, default=5, description='Example input.'),
-    'seed': number(min=0, max=1000000, description='A seed used to initialize the model.')
+    'model_checkpoint': runway.file(extension='.h5'),
 }
+
 @runway.setup(options=setup_options)
 def setup(opts):
-    msg = '[SETUP] Ran with options: seed = {}, truncation = {}'
-    print(msg.format(opts['seed'], opts['truncation']))
-    model = ExampleModel(opts)
+    msg = '[SETUP] Loading model: {}'
+    print(msg.format(opts['model_checkpoint']))
+    model = KerasModel(opts)
     return model
 
 # Every model needs to have at least one command. Every command allows to send
 # inputs and process outputs. To see a complete list of supported inputs and
 # outputs data types: https://sdk.runwayml.com/en/latest/data_types.html
-@runway.command(name='generate',
-                inputs={ 'caption': text() },
-                outputs={ 'image': image(width=512, height=512) },
-                description='Generates a red square when the input text input is "red".')
-def generate(model, args):
-    print('[GENERATE] Ran with caption value "{}"'.format(args['caption']))
-    # Generate a PIL or Numpy image based on the input caption, and return it
-    output_image = model.run_on_input(args['caption'])
+@runway.command(name='classify',
+                inputs={ 'image': image() },
+                outputs={ 'text': text() },
+                description='Predict cats or dogs in photo')
+def classify(model, args):
+    print('[CLASSIFY] Classifying image')
+    predictions = model.classify(args['image'])
     return {
-        'image': output_image
+        'text': predictions
     }
 
 if __name__ == '__main__':
     # run the model server using the default network interface and ports,
     # displayed here for convenience
-    runway.run(host='0.0.0.0', port=8000)
+    runway.run()
+    # runway.run(model_options={'model_checkpoint': 'checkpoints/cats_and_dogs_small_2.h5'})
+
 
 ## Now that the model is running, open a new terminal and give it a command to
-## generate an image. It will respond with a base64 encoded URI
+## classify an image. 
+
+# Fisrt encode the image
+# IMAGE64="data:image/jpeg;base64,"$(base64 -w 0 -i dog.jpg)
+
+# Then call the API
 # curl \
 #   -H "content-type: application/json" \
-#   -d '{ "caption": "red" }' \
-#   localhost:8000/generate
+#   -d "{ \"image\": \"$IMAGE64\" }"
+#   localhost:9000/classify

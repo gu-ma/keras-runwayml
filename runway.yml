@@ -6,7 +6,7 @@ python: 3.6
 # the generated Docker image.
 entrypoint: python runway_model.py
 # Which NVIDIA CUDA version to use. Supported versions include 10, 9.2, and 9.
-cuda: 9.2
+cuda: 10.0
 # Which ML framework would you like to pre-install? The appropriate GPU/CPU
 # versions of these libraries are selected automatically. Accepts values
 # "tensorflow" and "pytorch", installing Tensorflow v1.12 and Pytorch v1.0
@@ -25,8 +25,8 @@ files:
     # very long time to install on another user's machine. You can use the
     # files.ignore array to exclude files from your build.
     ignore:
-        - my_dataset/*
-        - secrets.txt
+        - assets/*
+        - checkpoints/*
 # The build_steps array allows you to run shell commands at build time. Each
 # Each build step is executed in the order it appears in the array.
 build_steps:
