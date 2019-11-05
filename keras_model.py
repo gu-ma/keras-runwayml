@@ -34,6 +34,7 @@ class KerasModel():
     def classify(self, img):
         img = img.resize(self.model.input_shape[1:3])
         x = image.img_to_array(img)
+        x = x/255
         x = np.expand_dims(x, axis=0)
         predictions = self.model.predict(x)
         return predictions[0][0]
